@@ -4,9 +4,9 @@ from allure_commons.types import AttachmentType
 from pyjavaproperties import Properties
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.firefox import GeckoDriverManager
-
+from selenium.webdriver import ChromeOptions
+from selenium.webdriver import FirefoxOptions
 @pytest.fixture()
 def log_on_failure(request):
     yield
@@ -33,12 +33,23 @@ def setup(request):
         pfile.load(open("../config.properties"))
     url = pfile['url']
     browser = pfile['browser']
-    if browser == 'chrome':
-        driver = webdriver.Chrome()
-        print("Launched chrome browser")
+    use_grid=pfile['use_grid']
+    grid_url=pfile['grid_url']
+    if use_grid == "no":
+        if browser == 'chrome':
+            driver = webdriver.Chrome()
+            print("Launched chrome browser in local system")
+        else:
+            driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
+            print("Launched firefox browser in local system")
     else:
-        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()))
-        print("Launched firefox browser")
+        if browser == "chrome":
+            browser_options=ChromeOptions()
+            print("Launched chrome browser in remote system")
+        else:
+            browser_options=FirefoxOptions()
+            print("Launched firefox browser in remote system")
+        driver=webdriver.Remote(grid_url,options=browser_options)
     driver.maximize_window()
     driver.get(url)
     request.cls.driver=driver
