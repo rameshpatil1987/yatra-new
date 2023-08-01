@@ -29,3 +29,6 @@ class BaseClass:
 
     def test_method1(self):
         print('test method1')
+
+    def test_method2(self):
+        print('test method2')
