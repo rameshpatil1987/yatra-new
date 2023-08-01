@@ -29,3 +29,4 @@ class BaseClass:
 
     def test_merge1(self):
         print('test merge1')
+
