@@ -27,5 +27,6 @@ class BaseClass:
         element = wait.until(EC.element_to_be_clickable((locator_type, locator)))
         return element
 
- 
+    def test_merge(self):
+        print('test merge')
 
